@@ -45,6 +45,7 @@ export default {
       measurementId: process.env.MEASUREMENT_ID,
     },
     services: { auth: true, firestore: true },
+    onFirebaseHosting: true,
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
