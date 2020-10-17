@@ -1,7 +1,7 @@
 <template>
   <div class="bg-blue-600 min-h-screen text-white font-semibold">
     <main class="max-w-screen-xl m-auto">
-      <h1>test</h1>
+      <h1>updated secret</h1>
       <h2>test</h2>
       <h3>test</h3>
       <nuxt />
