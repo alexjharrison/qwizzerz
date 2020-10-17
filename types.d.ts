@@ -6,7 +6,7 @@ export interface Team {
   }
 }
 
-interface Question {
+export interface Question {
   Answer: string
   Question: string
 }
