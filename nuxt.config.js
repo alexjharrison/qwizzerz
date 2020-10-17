@@ -10,14 +10,21 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        href:
+          'https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap',
+        rel: 'stylesheet',
+      },
+    ],
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ['@/plugins/composition-api'],
+  plugins: ['@/plugins/composition-api', '@/plugins/firestore-hooks.client.ts'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -45,7 +52,6 @@ export default {
       measurementId: process.env.MEASUREMENT_ID,
     },
     services: { auth: true, firestore: true },
-    onFirebaseHosting: true,
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

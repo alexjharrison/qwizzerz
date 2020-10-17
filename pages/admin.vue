@@ -1,10 +1,15 @@
 <template>
-  <div>test</div>
+  <admin-firestore-slot v-slot="slotProps">
+    {{ slotProps }}
+    <button @click="slotProps.functions.endGame">reset me</button>
+  </admin-firestore-slot>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
-  name: 'Test',
+import { defineComponent } from '@vue/composition-api'
+import adminFirestoreSlot from '~/services/adminFirestoreSlot.vue'
+
+export default defineComponent({
+  components: { adminFirestoreSlot },
 })
 </script>

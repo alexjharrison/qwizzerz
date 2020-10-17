@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-blue-600 min-h-screen text-white font-semibold">
+  <div class="min-h-screen font-semibold text-white bg-blue-600">
     <main class="max-w-screen-xl m-auto">
       <h1>updated secret</h1>
       <h2>test</h2>
@@ -10,8 +10,6 @@
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap');
-
 html,
 body {
   font-family: 'Roboto', sans-serif;

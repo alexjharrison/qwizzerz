@@ -1,9 +1,20 @@
 <template>
-  <div class="container">test</div>
+  <div class="container">{{ questionSets }}</div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from '@vue/composition-api'
+import { firestore } from 'firebase'
 
-export default Vue.extend({})
+interface Data {
+  questionSets: firestore.DocumentData | undefined
+}
+
+export default defineComponent({
+  data(): Data {
+    return {
+      questionSets: undefined,
+    }
+  },
+})
 </script>
