@@ -33,9 +33,9 @@ export default defineComponent({
     }
   },
   beforeMount() {
-    // this.fetchMetadata()
-    // this.fetchTeams()
-    // this.fetchQuestionSets()
+    this.fetchMetadata()
+    this.fetchTeams()
+    this.fetchQuestionSets()
   },
   methods: {
     fetchMetadata(): void {
@@ -54,7 +54,7 @@ export default defineComponent({
     },
     fetchTeams(): void {
       this.$fireStore.collection('Teams').onSnapshot(querySnapshot => {
-        this.questionSets = querySnapshot.docs.reduce(
+        this.teams = querySnapshot.docs.reduce(
           (acc: firestore.DocumentData[], doc) => [...acc, doc.data()],
           []
         )
