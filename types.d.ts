@@ -4,6 +4,7 @@ export interface Team {
     Text: string
     Wager: number
   }
+  id: string
 }
 
 export interface Question {
@@ -15,6 +16,7 @@ export interface QuestionSet {
   DateCreated: Date
   QuestionSetName: string
   Questions: Question[]
+  id: string
 }
 
 export interface GameMetadata {

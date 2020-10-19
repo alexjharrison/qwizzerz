@@ -6,8 +6,9 @@
         nextQuestion,
         openForTeams,
         endGame,
-        saveNewGame,
-        updateGameQuestions,
+        saveQuestionSet,
+        deleteQuestionSet,
+        deleteTeam,
       }"
     />
   </main>
@@ -45,17 +46,26 @@ export default defineComponent({
         .onSnapshot(querySnapshot => (this.gameMetadata = querySnapshot.data()))
     },
     fetchQuestionSets(): void {
-      this.$fireStore.collection('QuestionSets').onSnapshot(querySnapshot => {
-        this.questionSets = querySnapshot.docs.reduce(
-          (acc: firestore.DocumentData[], doc) => [...acc, doc.data()],
-          []
-        )
-      })
+      this.$fireStore
+        .collection('QuestionSets')
+        .orderBy('DateCreated', 'desc')
+        .onSnapshot(querySnapshot => {
+          this.questionSets = querySnapshot.docs.reduce(
+            (acc: firestore.DocumentData[], doc) => [
+              ...acc,
+              { ...doc.data(), id: doc.id },
+            ],
+            []
+          )
+        })
     },
     fetchTeams(): void {
       this.$fireStore.collection('Teams').onSnapshot(querySnapshot => {
         this.teams = querySnapshot.docs.reduce(
-          (acc: firestore.DocumentData[], doc) => [...acc, doc.data()],
+          (acc: firestore.DocumentData[], doc) => [
+            ...acc,
+            { ...doc.data(), id: doc.id },
+          ],
           []
         )
       })
@@ -68,9 +78,10 @@ export default defineComponent({
           QuestionNumber: this.gameMetadata.QuestionNumber + 1,
         })
     },
-    openForTeams(): void {
+    openForTeams(gameId: string): void {
       this.$fireStore.collection('GameMetadata').doc('status').update({
         HasGameStarted: true,
+        QuestionSetId: gameId,
       })
     },
     endGame(): void {
@@ -79,12 +90,32 @@ export default defineComponent({
         QuestionNumber: 0,
         HasGameStarted: false,
       })
+      this.$fireStore
+        .collection('Teams')
+        .get()
+        .then(docs => {
+          docs.forEach(doc => doc.ref.delete())
+        })
     },
-    saveNewGame(newGameQuestions: QuestionSet): void {
-      this.$fireStore.collection('QuestionSets').add(newGameQuestions)
+    saveQuestionSet(questionSet: QuestionSet): void {
+      const { id, ...questionSetWithoutId } = questionSet
+      if (id) {
+        this.$fireStore
+          .collection('QuestionSets')
+          .doc(id)
+          .update(questionSetWithoutId)
+      } else {
+        this.$fireStore.collection('QuestionSets').add({
+          ...questionSetWithoutId,
+          DateCreated: firestore.Timestamp.now(),
+        })
+      }
     },
-    updateGameQuestions(id: string, updateQuestions: QuestionSet): void {
-      this.$fireStore.collection('QuestionSets').doc(id).update(updateQuestions)
+    deleteQuestionSet(id: string): void {
+      this.$fireStore.collection('QuestionSets').doc(id).delete()
+    },
+    deleteTeam(id: string): void {
+      this.$fireStore.collection('Teams').doc(id).delete()
     },
   },
 })

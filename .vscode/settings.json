@@ -1,4 +1,7 @@
 {
-    "editor.formatOnSave": true,
-    "prettier.arrowParens": "avoid"
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "prettier.arrowParens": "avoid"
 }
