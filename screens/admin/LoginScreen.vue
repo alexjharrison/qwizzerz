@@ -14,7 +14,7 @@
         class="w-1/2 mt-2 mb-4 xl:w-1/2"
         autofocus
       />
-      <button type="submit" class="">Login</button>
+      <button type="submit">Login</button>
     </form>
   </div>
 </template>
@@ -24,7 +24,7 @@ import { defineComponent, ref } from '@vue/composition-api'
 
 export default defineComponent({
   setup(_props, { emit }) {
-    const password = ref('password')
+    const password = ref('')
 
     const handleSubmit = () => {
       if (password.value === 'password') emit('logged-in')

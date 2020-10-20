@@ -91,7 +91,7 @@ export default defineComponent({
     Spinner,
   },
   data: () => ({
-    isLoggedIn: true,
+    isLoggedIn: false,
     currentScreen: 'DashboardScreen',
     loadedQuestionSet: {},
   }),
