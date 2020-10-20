@@ -8,6 +8,7 @@
     <input
       id="question-set-name"
       v-model="questionSetName"
+      class="block w-full mb-5"
       name="question-set-name"
       type="text"
       required
@@ -29,6 +30,7 @@
         :id="`question-${i}`"
         v-model="formQuestions[i].Question"
         :name="`question-${i}`"
+        class="block w-full mb-5"
         type="text"
         required
       />
@@ -37,6 +39,7 @@
         :id="`answer-${i}`"
         v-model="formQuestions[i].Answer"
         :name="`answer-${i}`"
+        class="block w-full mb-5"
         type="text"
         required
       />
@@ -101,9 +104,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style scoped>
-input {
-  @apply block mb-5 w-full;
-}
-</style>

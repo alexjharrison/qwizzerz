@@ -14,10 +14,16 @@
       </div>
     </div>
     <div class="ml-12">
-      <button class="my-2" @click="$emit('edit-game', questionSet)">
+      <button
+        class="mx-2 my-2 text-2xl"
+        @click="$emit('edit-game', questionSet)"
+      >
         Edit Questions
       </button>
-      <button class="bg-green-600" @click="$emit('start-game', questionSet)">
+      <button
+        class="mx-2 text-2xl bg-green-600"
+        @click="$emit('start-game', questionSet)"
+      >
         Start Game
       </button>
     </div>
@@ -45,9 +51,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style scoped>
-button {
-  @apply mx-2 text-2xl;
-}
-</style>

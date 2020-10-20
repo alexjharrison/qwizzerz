@@ -2,16 +2,28 @@
   <div>
     <h3 class="inline text-3xl border-b">{{ team.Name }}</h3>
     <div v-if="currentAnswer" class="font-medium">
-      <p>
-        Answer: <span class="not-italic">{{ currentAnswer.Text }}</span>
+      <p class="text-2xl font-medium">
+        Answer:
+        <span class="text-2xl not-italic font-light">{{
+          currentAnswer.Text
+        }}</span>
       </p>
-      <p>
-        Wager: <span class="not-italic">{{ currentAnswer.Wager }}</span>
+      <p class="text-2xl font-medium">
+        Wager:
+        <span class="text-2xl not-italic font-light">{{
+          currentAnswer.Wager
+        }}</span>
       </p>
     </div>
     <div v-else class="font-semibold">
-      <p>Answer: <span class="pending">pending</span></p>
-      <p>Wager: <span class="pending">pending</span></p>
+      <p class="text-2xl font-medium">
+        Answer:
+        <span class="text-2xl italic font-light">pending</span>
+      </p>
+      <p class="text-2xl font-medium">
+        Wager:
+        <span class="text-2xl italic font-light">pending</span>
+      </p>
     </div>
   </div>
 </template>
@@ -31,15 +43,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style scoped>
-p {
-  @apply font-medium text-2xl;
-}
-span {
-  @apply font-light text-2xl;
-}
-.pending {
-  @apply font-light italic text-xl;
-}
-</style>

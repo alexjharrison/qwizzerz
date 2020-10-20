@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="text-center">Admin Dashboard</h1>
-    <section>
+    <section class="py-12">
       <h2>Create a new Question Set</h2>
       <p>Click below to populate questions for a new game</p>
       <button
@@ -12,7 +12,7 @@
       </button>
     </section>
     <hr />
-    <section>
+    <section class="py-12">
       <h2>Saved Games</h2>
       <select-game-box
         v-for="questionSet in questionSets"
@@ -39,9 +39,3 @@ export default defineComponent({
   components: { SelectGameBox },
 })
 </script>
-
-<style scoped>
-section {
-  @apply py-12;
-}
-</style>
