@@ -42,6 +42,6 @@ export default defineComponent({
 
 <style scoped>
 section {
-  @apply my-12;
+  @apply py-12;
 }
 </style>

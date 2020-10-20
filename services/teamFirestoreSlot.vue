@@ -1,9 +1,16 @@
 <template>
   <main>
     <slot
-      :data="{ gameMetadata, teamId, currentQuestion }"
+      :data="{
+        gameMetadata,
+        teamId,
+        currentQuestion,
+        answeredCurrentQuestion,
+        questionSet,
+      }"
       :functions="{ submitAnswer, setTeamName }"
-    />
+    >
+    </slot>
   </main>
 </template>
 
@@ -16,6 +23,7 @@ interface Data {
   gameMetadata: firebase.firestore.DocumentData | any
   teamId: string
   questionSet: string[]
+  answeredCurrentQuestion: boolean
 }
 
 export default defineComponent({
@@ -24,6 +32,7 @@ export default defineComponent({
       gameMetadata: {},
       teamId: '',
       questionSet: [],
+      answeredCurrentQuestion: false,
     }
   },
   beforeMount() {
@@ -64,6 +73,9 @@ export default defineComponent({
             QuestionNumber: this.gameMetadata.QuestionNumber,
           }),
         })
+        .then(() => {
+          this.answeredCurrentQuestion = true
+        })
     },
     fetchQuestions(): void {
       const { QuestionSetId } = this.gameMetadata
@@ -81,6 +93,12 @@ export default defineComponent({
         .collection('GameMetadata')
         .doc('status')
         .onSnapshot(querySnapshot => {
+          if (
+            querySnapshot.data()!.QuestionNumber !==
+            this.gameMetadata.QuestionNumber
+          ) {
+            this.answeredCurrentQuestion = false
+          }
           this.gameMetadata = querySnapshot.data()
           this.fetchQuestions()
           if (this.gameMetadata.HasGameStarted === false) this.setTeamId('')
