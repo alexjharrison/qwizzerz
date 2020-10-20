@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleSave">
+  <form class="p-4 pb-10" @submit.prevent="handleSave">
     <div class="flex items-center justify-between">
       <h1 class="mb-4">Game Question Set</h1>
       <button type="button" @click="$emit('back')">&lt; Back</button>
