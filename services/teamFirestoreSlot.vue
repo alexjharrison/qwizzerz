@@ -7,6 +7,8 @@
         currentQuestion,
         answeredCurrentQuestion,
         questionSet,
+        teamInfo,
+        currentAnswer,
       }"
       :functions="{ submitAnswer, setTeamName }"
     >
@@ -21,9 +23,9 @@ import { Question } from '~/types'
 
 interface Data {
   gameMetadata: firebase.firestore.DocumentData | any
+  teamInfo: firebase.firestore.DocumentData | any
   teamId: string
   questionSet: string[]
-  answeredCurrentQuestion: boolean
 }
 
 export default defineComponent({
@@ -31,8 +33,8 @@ export default defineComponent({
     return {
       gameMetadata: {},
       teamId: '',
+      teamInfo: {},
       questionSet: [],
-      answeredCurrentQuestion: false,
     }
   },
   beforeMount() {
@@ -48,6 +50,21 @@ export default defineComponent({
     currentQuestion(): string {
       return this.questionSet[this.gameMetadata.QuestionNumber - 1] || ''
     },
+    answeredCurrentQuestion(): boolean {
+      if (!this.teamInfo.Answers || !this.gameMetadata.QuestionNumber)
+        return false
+      return Boolean(
+        this.teamInfo.Answers[this.gameMetadata.QuestionNumber - 1]
+      )
+    },
+    currentAnswer(): string {
+      return !this.teamInfo ||
+        !this.teamInfo.Answers ||
+        !this.gameMetadata.QuestionNumber ||
+        !this.teamInfo.Answers[this.gameMetadata.QuestionNumber - 1]
+        ? ''
+        : this.teamInfo.Answers[this.gameMetadata.QuestionNumber - 1].Text
+    },
   },
   methods: {
     setTeamName(name: string): void {
@@ -61,23 +78,31 @@ export default defineComponent({
     setTeamId(id: string): void {
       this.teamId = id
       window.localStorage.setItem('team_id', this.teamId)
+      this.fetchTeamInfo(id)
     },
-    submitAnswer(answer: string, wager: number): void {
+    submitAnswer(Text: string, Wager: number): void {
+      if (!this.teamId) return
+
+      const Answers = this.teamInfo.Answers.map(({ ...vals }) => ({ ...vals }))
+      Answers[this.gameMetadata.QuestionNumber - 1] = { Text, Wager }
+      for (let i = 0; i < Answers.length; i++) {
+        if (!Answers[i]) Answers[i] = { Text: '', Wager: '' }
+      }
+      this.$fireStore.collection('Teams').doc(this.teamId).update({ Answers })
+    },
+    fetchTeamInfo(teamId: string): void {
+      if (!teamId) return
+
       this.$fireStore
         .collection('Teams')
-        .doc(this.teamId)
-        .update({
-          Answers: firestore.FieldValue.arrayUnion({
-            Text: answer,
-            Wager: wager,
-            QuestionNumber: this.gameMetadata.QuestionNumber,
-          }),
-        })
-        .then(() => {
-          this.answeredCurrentQuestion = true
+        .doc(teamId)
+        .onSnapshot((querySnapshot: firestore.DocumentData) => {
+          this.teamInfo = querySnapshot.data()
         })
     },
     fetchQuestions(): void {
+      if (!this.gameMetadata.QuestionSetId) return
+
       const { QuestionSetId } = this.gameMetadata
       this.$fireStore
         .collection('QuestionSets')
@@ -86,6 +111,7 @@ export default defineComponent({
           this.questionSet = querySnapshot
             .data()
             .Questions.map((question: Question) => question.Question)
+          this.fetchTeamInfo(this.teamId)
         })
     },
     fetchMetadata(): void {
@@ -97,7 +123,6 @@ export default defineComponent({
             querySnapshot.data()!.QuestionNumber !==
             this.gameMetadata.QuestionNumber
           ) {
-            this.answeredCurrentQuestion = false
           }
           this.gameMetadata = querySnapshot.data()
           this.fetchQuestions()

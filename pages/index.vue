@@ -16,22 +16,22 @@
       />
       <answering-screen
         v-else-if="
-          data.gameMetadata.QuestionNumber > 0 && !data.answeredCurrentQuestion
+          data.gameMetadata.QuestionNumber > 0 &&
+          !data.answeredCurrentQuestion &&
+          data.teamId
         "
         :question="data.currentQuestion"
         :question-number="data.gameMetadata.QuestionNumber"
-        @erase-current-answer="currentAnswer = null"
-        @answer-question="
-          currentAnswer = $event.answer
-          functions.submitAnswer($event.answer, $event.wager)
-        "
+        @answer-question="functions.submitAnswer($event.answer, $event.wager)"
       />
       <answered-screen
         v-else-if="
-          data.gameMetadata.QuestionNumber > 0 && data.answeredCurrentQuestion
+          data.gameMetadata.QuestionNumber > 0 &&
+          data.answeredCurrentQuestion &&
+          data.teamId
         "
         :question="data.currentQuestion"
-        :answer="currentAnswer"
+        :answer="data.currentAnswer"
       />
     </div>
   </team-firestore-slot>
@@ -54,11 +54,6 @@ export default defineComponent({
     LandingScreen,
     CreateTeamScreen,
     WaitingToStartScreen,
-  },
-  data() {
-    return {
-      currentAnswer: null,
-    }
   },
 })
 </script>

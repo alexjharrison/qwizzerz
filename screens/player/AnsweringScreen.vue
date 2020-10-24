@@ -38,8 +38,5 @@ export default defineComponent({
     questionNumber: { type: Number, required: true },
   },
   data: () => ({ answer: null, wager: null }),
-  mounted() {
-    this.$emit('erase-current-answer')
-  },
 })
 </script>
